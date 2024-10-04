@@ -1,9 +1,30 @@
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import "./App.css";
+import AppLayout from "@/layouts/app-layout";
+import Landing from "@/pages/landing";
+import Auth from "@/pages/auth";
+import { RouteUrls } from "@/lib/constant";
+
+const router = createBrowserRouter([
+  {
+    element: <AppLayout />,
+    children: [
+      {
+        path: RouteUrls.ROOT,
+        element: <Landing />,
+      },
+      {
+        path: RouteUrls.AUTH,
+        element: <Auth />,
+      },
+    ],
+  },
+]);
 
 function App() {
   return (
     <>
-      <div className="text-red-500 text-2xl">Initial Setup - Url Shortener</div>
+      <RouterProvider router={router} />
     </>
   );
 }
