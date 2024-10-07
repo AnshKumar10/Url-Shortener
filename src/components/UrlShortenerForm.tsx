@@ -30,7 +30,7 @@ const URLShortenerForm: React.FC<URLShortenerFormPropsInterface> = ({ shortenUrl
                   id="url"
                   name="url"
                   type="text"
-                  placeholder="Enter your loooong Url"
+                  placeholder="Enter your long Url"
                   className="pl-8 pr-2 py-2 w-full"
                 />
               </div>
@@ -38,7 +38,7 @@ const URLShortenerForm: React.FC<URLShortenerFormPropsInterface> = ({ shortenUrl
                 Shorten!
               </Button>
             </div>
-            <ErrorMessage name="url" component="div" className="error-message" />
+            <ErrorMessage name="url" component="div" className="text-start error-message" />
           </div>
         </Form>
       )}
