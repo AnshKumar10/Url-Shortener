@@ -30,7 +30,7 @@ const Header = () => {
   return (
     <>
       <header className="w-full bg-white shadow-sm">
-        <div className="container mx-auto px-4 flex justify-between items-center">
+        <div className="container mx-auto px-8 flex justify-between items-center">
           <h1
             className="text-2xl font-bold text-blue-600 cursor-pointer"
             onClick={navigateToHomepage}
@@ -71,7 +71,7 @@ const Header = () => {
                       onClick={() => {
                         fnLogout().then(() => {
                           fetchUser();
-                          navigate("/auth");
+                          navigate(RouteUrls.AUTH);
                         });
                       }}
                       className="text-red-400"

@@ -8,6 +8,7 @@ import { RouteUrls } from "@/lib/constant";
 import UrlContextProvider from "@/lib/context/urlContext";
 import RequireAuth from "@/layouts/required-auth";
 import RedirectLink from "@/pages/redirect";
+import Stats from "@/pages/stats";
 
 const router = createBrowserRouter([
   {
@@ -32,6 +33,14 @@ const router = createBrowserRouter([
       {
         path: "/:id",
         element: <RedirectLink />,
+      },
+      {
+        path: "/link/:id",
+        element: (
+          <RequireAuth>
+            <Stats />
+          </RequireAuth>
+        ),
       },
     ],
   },

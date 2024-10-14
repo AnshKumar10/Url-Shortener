@@ -64,8 +64,8 @@ const Dashboard = () => {
         </Card>
       </div>
       <Card>
-        <CardHeader>
-          <CardTitle>My Links</CardTitle>
+        <CardHeader className="flex flex-row items-center justify-between">
+          <CardTitle className="text-lg font-semibold">My Links</CardTitle>
           <CreateUrlShortenerForm />
         </CardHeader>
         <CardContent>
@@ -82,7 +82,7 @@ const Dashboard = () => {
           {isUrlsLoading || isUrlClickStatsLoading ? (
             <BarLoader width={"100%"} color="#2563EB" />
           ) : (
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 p-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 p-4">
               {(filteredUrls || []).map((url) => (
                 <LinkCard key={url.id} url={url} fetchUrls={fetchUrls} />
               ))}

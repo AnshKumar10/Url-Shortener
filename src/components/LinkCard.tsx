@@ -20,7 +20,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import { downloadImage } from "@/lib/utils";
+import { copyToClipboard, downloadImage } from "@/lib/utils";
 import { deleteUrl } from "@/lib/services/urls";
 import useFetch from "@/lib/hooks/useFetchHook";
 import { UrlsDbInterface } from "@/lib/interfaces";
@@ -31,32 +31,28 @@ interface LinkCardProps {
 }
 
 const LinkCard: React.FC<LinkCardProps> = ({ url, fetchUrls }) => {
-  const copyToClipboard = () => {
-    navigator.clipboard.writeText(`https://trimrr.in/${url?.short_url}`);
-  };
-
   const { fn: handleDeleteUrl } = useFetch(deleteUrl, url?.id);
 
   return (
     <Card className="w-full max-w-2xl bg-card hover:shadow-lg transition-shadow duration-300">
-      <CardHeader className="flex flex-row items-center gap-4">
-        {url?.qr_code ? (
-          <img
-            src={url?.qr_code}
-            className="h-24 w-24 object-contain rounded-md ring-2 ring-primary"
-            alt="QR code"
-          />
-        ) : (
-          <img
-            src={
-              "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRXJA32WU4rBpx7maglqeEtt3ot1tPIRWptxA&s"
-            }
-            className="h-24 w-24 object-contain rounded-md ring-2 ring-primary"
-            alt="QR code"
-          />
-        )}
-        <div className="flex-1">
-          <CardTitle className="text-2xl font-bold">
+      <CardHeader className="flex flex-col sm:flex-row items-center gap-4">
+        <div className="w-full sm:w-auto flex justify-center">
+          {url?.qr_code ? (
+            <img
+              src={url?.qr_code}
+              className="h-24 w-24 object-contain rounded-md ring-2 ring-primary"
+              alt="QR code"
+            />
+          ) : (
+            <img
+              src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRXJA32WU4rBpx7maglqeEtt3ot1tPIRWptxA&s"
+              className="h-24 w-24 object-contain rounded-md ring-2 ring-primary"
+              alt="QR code placeholder"
+            />
+          )}
+        </div>
+        <div className="flex-1 text-center sm:text-left">
+          <CardTitle className="text-xl sm:text-2xl font-bold">
             <Link
               to={`/link/${url?.id}`}
               className="hover:text-primary transition-colors"
@@ -70,21 +66,21 @@ const LinkCard: React.FC<LinkCardProps> = ({ url, fetchUrls }) => {
         </div>
       </CardHeader>
       <CardContent>
-        <div className="space-y-2">
-          <div className="flex items-center gap-2">
-            <LinkIcon className="h-4 w-4 text-primary" />
+        <div className="space-y-3">
+          <div className="flex items-center gap-2 bg-secondary p-2 rounded-md">
+            <LinkIcon className="h-4 w-4 text-primary flex-shrink-0" />
             <a
               href={`https://trimrr.in/${url?.custom_url || url.short_url}`}
               target="_blank"
               rel="noopener noreferrer"
-              className="text-primary hover:underline flex items-center gap-1"
+              className="text-primary hover:underline flex items-center gap-1 truncate"
             >
               trimrr.in/{url?.custom_url || url.short_url}
-              <ExternalLink className="h-3 w-3" />
+              <ExternalLink className="h-3 w-3 flex-shrink-0" />
             </a>
           </div>
-          <div className="flex w-full items-center gap-2">
-            <LinkIcon className="h-4 w-4 text-muted-foreground" />
+          <div className="flex items-center gap-2 bg-secondary p-2 rounded-md">
+            <LinkIcon className="h-4 w-4 text-muted-foreground flex-shrink-0" />
             <a
               href={url?.original_url}
               target="_blank"
@@ -92,17 +88,23 @@ const LinkCard: React.FC<LinkCardProps> = ({ url, fetchUrls }) => {
               className="text-sm text-muted-foreground hover:underline truncate flex items-center gap-1"
             >
               {url?.original_url}
-              <ExternalLink className="h-3 w-3" />
+              <ExternalLink className="h-3 w-3 flex-shrink-0" />
             </a>
           </div>
         </div>
       </CardContent>
-      <CardFooter className="justify-end gap-2">
+      <CardFooter className="justify-center sm:justify-end gap-2 flex-wrap">
         <TooltipProvider>
           <Tooltip>
             <TooltipTrigger asChild>
-              <Button variant="outline" size="icon" onClick={copyToClipboard}>
-                <Copy className="h-4 w-4" />
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() =>
+                  copyToClipboard(`https://trimrr.in/${url?.short_url}`)
+                }
+              >
+                <Copy className="h-4 w-4 mr-2" /> Copy
               </Button>
             </TooltipTrigger>
             <TooltipContent>
@@ -116,12 +118,12 @@ const LinkCard: React.FC<LinkCardProps> = ({ url, fetchUrls }) => {
               <TooltipTrigger asChild>
                 <Button
                   variant="outline"
-                  size="icon"
+                  size="sm"
                   onClick={() =>
                     downloadImage(url.qr_code as string, url.title)
                   }
                 >
-                  <Download className="h-4 w-4" />
+                  <Download className="h-4 w-4 mr-2" /> QR
                 </Button>
               </TooltipTrigger>
               <TooltipContent>
@@ -135,14 +137,14 @@ const LinkCard: React.FC<LinkCardProps> = ({ url, fetchUrls }) => {
             <TooltipTrigger asChild>
               <Button
                 variant="outline"
-                size="icon"
+                size="sm"
                 onClick={() => handleDeleteUrl().then(() => fetchUrls())}
               >
-                <Trash className="h-4 w-4 text-red-500" />
+                <Trash className="h-4 w-4 mr-2 text-red-500" /> Delete
               </Button>
             </TooltipTrigger>
             <TooltipContent>
-              <p>Delete Url</p>
+              <p>Delete URL</p>
             </TooltipContent>
           </Tooltip>
         </TooltipProvider>

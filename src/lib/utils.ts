@@ -23,3 +23,7 @@ export const generateShortUrl = (length: number) => {
   }
   return shortUrl;
 };
+
+export const copyToClipboard = (text: string) => {
+  navigator.clipboard.writeText(text);
+};

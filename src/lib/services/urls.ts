@@ -115,3 +115,39 @@ export const storeUrlStats = async ({
     console.error("Error recording click:", error);
   }
 };
+
+export const getClicksForUrl = async (id: string) => {
+  const { data, error } = await supabase
+    .from("url-click")
+    .select("*")
+    .eq("url_id", id);
+
+  if (error) {
+    console.error(error);
+    throw new Error("Unable to load Stats");
+  }
+
+  return data;
+};
+
+export const getUrl = async ({
+  id,
+  user_id,
+}: {
+  id: string;
+  user_id: string;
+}) => {
+  const { data, error } = await supabase
+    .from("urls")
+    .select("*")
+    .eq("id", id)
+    .eq("user_id", user_id)
+    .single();
+
+  if (error) {
+    console.error(error);
+    throw new Error("Short Url not found");
+  }
+
+  return data;
+};
