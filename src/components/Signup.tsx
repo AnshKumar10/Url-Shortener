@@ -12,9 +12,9 @@ import { Label } from "@/components/ui/label";
 import { User, Mail, Lock, Upload } from "lucide-react";
 import { signUpFormSchema } from "@/lib/schemas";
 import { useFormik } from "formik";
-import { signup } from "@/lib/services/apis";
+import { signup } from "@/lib/services/core";
 import { useNavigate, useSearchParams } from "react-router-dom";
-import useFetch from "@/lib/hooks/fetch";
+import useFetch from "@/lib/hooks/useFetchHook";
 import { useEffect } from "react";
 import { LongUrlSearchParams, RouteUrls } from "@/lib/constant";
 

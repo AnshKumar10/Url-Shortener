@@ -12,12 +12,12 @@ import { Mail, Lock } from "lucide-react";
 import { useFormik } from "formik";
 import { loginFormSchema } from "@/lib/schemas";
 import { Input } from "@/components/ui/input";
-import { login } from "@/lib/services/apis";
+import { login } from "@/lib/services/core";
 import { useNavigate, useSearchParams } from "react-router-dom";
-import { UrlState } from "@/context";
+import { UrlState } from "@/lib/context/urlContext";
 import { LongUrlSearchParams, RouteUrls } from "@/lib/constant";
 import { useEffect } from "react";
-import useFetch from "@/lib/hooks/fetch";
+import useFetch from "@/lib/hooks/useFetchHook";
 
 const LoginForm = () => {
   const [searchParams] = useSearchParams();

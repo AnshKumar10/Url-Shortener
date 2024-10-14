@@ -1,8 +1,8 @@
 import { Button } from "@/components/ui/button";
-import { UrlState } from "@/context";
+import { UrlState } from "@/lib/context/urlContext";
 import { RouteUrls } from "@/lib/constant";
-import useFetch from "@/lib/hooks/fetch";
-import { logout } from "@/lib/services/apis";
+import useFetch from "@/lib/hooks/useFetchHook";
+import { logout } from "@/lib/services/core";
 import { LinkIcon, LogOut } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import { BarLoader } from "react-spinners";

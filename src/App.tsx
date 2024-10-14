@@ -5,8 +5,9 @@ import Landing from "@/pages/landing";
 import Auth from "@/pages/auth";
 import Dashboard from "@/pages/dashboard";
 import { RouteUrls } from "@/lib/constant";
-import UrlProvider from "@/context";
+import UrlContextProvider from "@/lib/context/urlContext";
 import RequireAuth from "@/layouts/required-auth";
+import RedirectLink from "@/pages/redirect";
 
 const router = createBrowserRouter([
   {
@@ -28,15 +29,19 @@ const router = createBrowserRouter([
           </RequireAuth>
         ),
       },
+      {
+        path: "/:id",
+        element: <RedirectLink />,
+      },
     ],
   },
 ]);
 
 function App() {
   return (
-    <UrlProvider>
+    <UrlContextProvider>
       <RouterProvider router={router} />
-    </UrlProvider>
+    </UrlContextProvider>
   );
 }
 

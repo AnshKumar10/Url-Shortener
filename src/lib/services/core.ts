@@ -32,7 +32,7 @@ export const signup = async ({
     options: {
       data: {
         name,
-        profile_pic: `${supabaseUrl}/storage/v1/object/public/profile_pic/${fileName}`,
+        profile_pic: `${supabaseUrl}/storage/v1/object/public/profile-pic/${fileName}`,
       },
     },
   });
@@ -40,15 +40,6 @@ export const signup = async ({
   if (error) throw new Error(error.message);
 
   return data;
-};
-
-export const getCurrentUser = async () => {
-  const { data: session, error } = await supabase.auth.getSession();
-
-  if (!session.session) return null;
-  if (error) throw new Error(error.message);
-
-  return session.session?.user;
 };
 
 export const logout = async () => {

@@ -30,3 +30,23 @@ export const signUpFormSchema = Yup.object().shape({
     .required("Password is required"),
   profilePic: Yup.mixed().required(),
 });
+
+const urlRegex = /^(https?:\/\/)?([\da-z.-]+)\.([a-z.]{2,6})([/\w .-]*)*\/?$/;
+
+export const CreateUrlShortenerFormSchema = Yup.object().shape({
+  title: Yup.string()
+    .min(3, "Title must be at least 3 characters")
+    .max(50, "Title must be 50 characters or less")
+    .required("Title is required"),
+  longUrl: Yup.string()
+    .matches(urlRegex, "Enter a valid URL")
+    .required("Long URL is required"),
+  customUrl: Yup.string()
+    .min(3, "Custom URL must be at least 3 characters")
+    .max(20, "Custom URL must be 20 characters or less")
+    .matches(
+      /^[a-zA-Z0-9-_]+$/,
+      "Only alphanumeric characters, hyphens, and underscores are allowed"
+    )
+    .notRequired(),
+});

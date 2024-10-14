@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useEffect, ReactNode } from "react";
-import { getCurrentUser } from "@/lib/services/apis";
-import useFetch from "@/lib/hooks/fetch";
+import { getCurrentUser } from "@/lib/services/user";
+import useFetch from "@/lib/hooks/useFetchHook";
 import { User } from "@supabase/supabase-js";
 
 interface UrlContextValue {
@@ -12,7 +12,9 @@ interface UrlContextValue {
 
 const UrlContext = createContext<UrlContextValue | undefined>(undefined);
 
-const UrlProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
+const UrlContextProvider: React.FC<{ children: ReactNode }> = ({
+  children,
+}) => {
   const { data: user, loading, fn: fetchUser } = useFetch(getCurrentUser);
 
   const isAuthenticated = user?.role === "authenticated";
@@ -21,8 +23,6 @@ const UrlProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
     fetchUser();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-
-  console.log(user);
 
   return (
     <UrlContext.Provider value={{ user, fetchUser, loading, isAuthenticated }}>
@@ -39,4 +39,4 @@ export const UrlState = (): UrlContextValue => {
   return context;
 };
 
-export default UrlProvider;
+export default UrlContextProvider;
