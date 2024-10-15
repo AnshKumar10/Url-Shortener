@@ -33,7 +33,7 @@ const DeviceStats: React.FC<DeviceStatsProps> = ({ stats }) => {
             }
             dataKey="count"
           >
-            {result.map((entry, index) => (
+            {result.map((_entry, index) => (
               <Cell
                 key={`cell-${index}`}
                 fill={COLORS[index % COLORS.length]}

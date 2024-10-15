@@ -103,7 +103,7 @@ export const storeUrlStats = async ({
 
   try {
     const res = parser.getResult();
-    const device = res.type || "desktop";
+    const device = res?.device || "desktop";
 
     const response = await fetch("https://ipapi.co/json");
     const { city, country_name: country } = await response.json();

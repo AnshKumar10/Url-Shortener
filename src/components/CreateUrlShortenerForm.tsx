@@ -34,7 +34,7 @@ const CreateUrlShortenerForm: React.FC<
       customUrl: "",
     },
     validationSchema: CreateUrlShortenerFormSchema,
-    onSubmit: (values, { setSubmitting }) => {
+    onSubmit: (_values, { setSubmitting }) => {
       setSubmitting(false);
       setOpen(false);
       handleCreateUrl().then(() => fetchUrls());
