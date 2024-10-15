@@ -37,7 +37,7 @@ const Header = () => {
             className="text-2xl font-bold text-blue-600 cursor-pointer"
             onClick={navigateToHomepage}
           >
-            Trimrr
+            SnipUrl
           </h1>
           <nav className="py-4 flex items-center">
             <div className="flex gap-4">

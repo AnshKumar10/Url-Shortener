@@ -25,6 +25,7 @@ import { deleteUrl } from "@/lib/services/urls";
 import useFetch from "@/lib/hooks/useFetchHook";
 import { UrlsDbInterface } from "@/lib/interfaces";
 import useCopy from "@/lib/hooks/useCopyHook";
+import { BaseUrl } from "@/lib/constant";
 
 interface LinkCardProps {
   url: UrlsDbInterface;
@@ -73,12 +74,12 @@ const LinkCard: React.FC<LinkCardProps> = ({ url, fetchUrls }) => {
           <div className="flex items-center gap-2 bg-secondary p-2 rounded-md">
             <LinkIcon className="h-4 w-4 text-primary flex-shrink-0" />
             <a
-              href={`https://trimrr.in/${url?.custom_url || url.short_url}`}
+              href={`${BaseUrl}${url?.custom_url || url.short_url}`}
               target="_blank"
               rel="noopener noreferrer"
               className="text-primary hover:underline flex items-center gap-1 truncate"
             >
-              trimrr.in/{url?.custom_url || url.short_url}
+              {BaseUrl}{url?.custom_url || url.short_url}
               <ExternalLink className="h-3 w-3 flex-shrink-0" />
             </a>
           </div>
@@ -103,7 +104,7 @@ const LinkCard: React.FC<LinkCardProps> = ({ url, fetchUrls }) => {
               <Button
                 variant="outline"
                 size="sm"
-                onClick={() => copyText(`https://trimrr.in/${url?.short_url}`)}
+                onClick={() => copyText(`${BaseUrl}${url?.short_url}`)}
               >
                 <Copy className="h-4 w-4 mr-2" />
                 {isCopying ? "Copied!" : "Copy"}

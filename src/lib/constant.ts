@@ -9,7 +9,7 @@ export const LongUrlSearchParams = "create";
 export const Faqs = [
   {
     value: "item-1",
-    question: "How does the Trimrr URL shortener work?",
+    question: "How does the SnipUrl URL shortener work?",
     answer:
       "When you enter a long URL, our system generates a shorter version of that URL. This shortened URL redirects to the original long URL when accessed. It's quick, efficient, and helps make your links more manageable.",
   },
@@ -26,3 +26,5 @@ export const Faqs = [
       "Our comprehensive analytics include the number of clicks, geolocation data of the clicks, device types (mobile/desktop), referral sources, and time-based click patterns. This data helps you understand your audience and optimize your marketing strategies.",
   },
 ];
+
+export const BaseUrl = "https://SnipUrl.in/"

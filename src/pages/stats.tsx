@@ -5,7 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { UrlState } from "@/lib/context/urlContext";
-import { RouteUrls } from "@/lib/constant";
+import { BaseUrl, RouteUrls } from "@/lib/constant";
 import useFetch from "@/lib/hooks/useFetchHook";
 import { deleteUrl, getClicksForUrl, getUrl } from "@/lib/services/urls";
 import { downloadImage } from "@/lib/utils";
@@ -87,12 +87,12 @@ const LinkPage = () => {
               </label>
               <div className="flex items-center space-x-2">
                 <a
-                  href={`https://trimrr.in/${url?.short_url}`}
+                  href={`${BaseUrl}${url?.short_url}`}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="text-xl text-blue-500 font-semibold hover:underline"
                 >
-                  {`https://trimrr.in/${url?.short_url}`}
+                  {`${BaseUrl}${url?.short_url}`}
                 </a>
               </div>
             </div>
@@ -130,7 +130,7 @@ const LinkPage = () => {
                   size="sm"
                   onClick={() =>
                     copyText(
-                      `https://trimrr.in/${url?.custom_url || url?.short_url}`
+                      `${BaseUrl}${url?.custom_url || url?.short_url}`
                     )
                   }
                 >
