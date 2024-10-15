@@ -23,10 +23,12 @@ const Header = () => {
 
   const navigateToLogin = () => navigate(RouteUrls.AUTH);
 
+  const navigateToSignup = () => navigate(`${RouteUrls.AUTH}?tab=signup`);
+
   const { user, fetchUser } = UrlState();
 
   const { loading, fn: fnLogout } = useFetch(logout);
-  
+
   return (
     <>
       <header className="w-full bg-white shadow-sm">
@@ -44,7 +46,7 @@ const Header = () => {
                   <Button onClick={navigateToLogin} variant="ghost">
                     Login
                   </Button>
-                  <Button>Sign Up</Button>
+                  <Button onClick={navigateToSignup}>Sign Up</Button>
                 </div>
               ) : (
                 <DropdownMenu>

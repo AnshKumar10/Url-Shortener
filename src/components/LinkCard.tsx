@@ -20,10 +20,11 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import { copyToClipboard, downloadImage } from "@/lib/utils";
+import { downloadImage } from "@/lib/utils";
 import { deleteUrl } from "@/lib/services/urls";
 import useFetch from "@/lib/hooks/useFetchHook";
 import { UrlsDbInterface } from "@/lib/interfaces";
+import useCopy from "@/lib/hooks/useCopyHook";
 
 interface LinkCardProps {
   url: UrlsDbInterface;
@@ -33,20 +34,22 @@ interface LinkCardProps {
 const LinkCard: React.FC<LinkCardProps> = ({ url, fetchUrls }) => {
   const { fn: handleDeleteUrl } = useFetch(deleteUrl, url?.id);
 
+  const { copyText, isCopying } = useCopy();
+
   return (
     <Card className="w-full max-w-2xl bg-card hover:shadow-lg transition-shadow duration-300">
-      <CardHeader className="flex flex-col sm:flex-row items-center gap-4">
+      <CardHeader className="flex flex-col sm:flex-row gap-4">
         <div className="w-full sm:w-auto flex justify-center">
           {url?.qr_code ? (
             <img
               src={url?.qr_code}
-              className="h-24 w-24 object-contain rounded-md ring-2 ring-primary"
+              className="h-24 w-24 object-cover min-w-max rounded-md ring-2 ring-primary"
               alt="QR code"
             />
           ) : (
             <img
               src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRXJA32WU4rBpx7maglqeEtt3ot1tPIRWptxA&s"
-              className="h-24 w-24 object-contain rounded-md ring-2 ring-primary"
+              className="h-24 w-24 object-cover min-w-max rounded-md ring-2 ring-primary"
               alt="QR code placeholder"
             />
           )}
@@ -100,11 +103,10 @@ const LinkCard: React.FC<LinkCardProps> = ({ url, fetchUrls }) => {
               <Button
                 variant="outline"
                 size="sm"
-                onClick={() =>
-                  copyToClipboard(`https://trimrr.in/${url?.short_url}`)
-                }
+                onClick={() => copyText(`https://trimrr.in/${url?.short_url}`)}
               >
-                <Copy className="h-4 w-4 mr-2" /> Copy
+                <Copy className="h-4 w-4 mr-2" />
+                {isCopying ? "Copied!" : "Copy"}
               </Button>
             </TooltipTrigger>
             <TooltipContent>

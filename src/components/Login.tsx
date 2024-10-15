@@ -30,14 +30,14 @@ const LoginForm = () => {
     validationSchema: loginFormSchema,
     onSubmit: async () => {
       try {
-        await fnLogin();
+        await loginUser();
       } catch (error) {
         console.log(error);
       }
     },
   });
 
-  const { error, loading, fn: fnLogin, data } = useFetch(login, formik.values);
+  const { error, loading, fn: loginUser, data } = useFetch(login, formik.values);
 
   useEffect(() => {
     if (!error && data) {

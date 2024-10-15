@@ -1,4 +1,4 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import { useFormik } from "formik";
 import { CreateUrlShortenerFormSchema } from "@/lib/schemas";
 import {
@@ -17,7 +17,13 @@ import { createUrl } from "@/lib/services/urls";
 import useFetch from "@/lib/hooks/useFetchHook";
 import { UrlState } from "@/lib/context/urlContext";
 
-const CreateUrlShortenerForm = () => {
+interface CreateUrlShortenerFormPropsInterface {
+  fetchUrls: (...args: unknown[]) => Promise<void>;
+}
+
+const CreateUrlShortenerForm: React.FC<
+  CreateUrlShortenerFormPropsInterface
+> = ({ fetchUrls }) => {
   const [open, setOpen] = useState(false);
   const { user } = UrlState();
 
@@ -31,7 +37,7 @@ const CreateUrlShortenerForm = () => {
     onSubmit: (values, { setSubmitting }) => {
       setSubmitting(false);
       setOpen(false);
-      handleCreateUrl();
+      handleCreateUrl().then(() => fetchUrls());
       formik.resetForm();
     },
   });

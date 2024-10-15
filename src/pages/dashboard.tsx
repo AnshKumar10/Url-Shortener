@@ -8,6 +8,7 @@ import useFetch from "@/lib/hooks/useFetchHook";
 import { getClicksForUrls, getUrls } from "@/lib/services/urls";
 import LinkCard from "@/components/LinkCard";
 import CreateUrlShortenerForm from "@/components/CreateUrlShortenerForm";
+import { debounce } from "@/lib/utils";
 
 const Dashboard = () => {
   const [searchQuery, setSearchQuery] = useState("");
@@ -43,6 +44,10 @@ const Dashboard = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [urls?.length]);
 
+  const handleSearchChange = debounce((value) => {
+    setSearchQuery(value);
+  });
+
   return (
     <div className="p-10 space-y-4">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -66,7 +71,7 @@ const Dashboard = () => {
       <Card>
         <CardHeader className="flex flex-row items-center justify-between">
           <CardTitle className="text-lg font-semibold">My Links</CardTitle>
-          <CreateUrlShortenerForm />
+          <CreateUrlShortenerForm fetchUrls={fetchUrls} />
         </CardHeader>
         <CardContent>
           <div className="flex items-center space-x-2 mb-4">
@@ -74,15 +79,14 @@ const Dashboard = () => {
             <Input
               type="text"
               placeholder="Search links..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
+              onChange={(event) => handleSearchChange(event.target.value)}
               className="flex-grow"
             />
           </div>
           {isUrlsLoading || isUrlClickStatsLoading ? (
             <BarLoader width={"100%"} color="#2563EB" />
           ) : (
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 p-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 p-4">
               {(filteredUrls || []).map((url) => (
                 <LinkCard key={url.id} url={url} fetchUrls={fetchUrls} />
               ))}

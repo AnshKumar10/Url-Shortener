@@ -33,7 +33,7 @@ const SignupForm = () => {
     validationSchema: signUpFormSchema,
     onSubmit: async () => {
       try {
-        await fnSignup();
+        await signupUser();
       } catch (error) {
         console.log(error);
       }
@@ -43,7 +43,7 @@ const SignupForm = () => {
   const {
     loading,
     error,
-    fn: fnSignup,
+    fn: signupUser,
     data,
   } = useFetch(signup, formik.values);
 

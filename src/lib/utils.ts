@@ -24,6 +24,18 @@ export const generateShortUrl = (length: number) => {
   return shortUrl;
 };
 
-export const copyToClipboard = (text: string) => {
-  navigator.clipboard.writeText(text);
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export const debounce = <F extends (...args: any[]) => void>(
+  func: F,
+  delay = 300
+): ((...args: Parameters<F>) => void) => {
+  let timeoutId: ReturnType<typeof setTimeout> | null = null;
+
+  return (...args: Parameters<F>) => {
+    if (timeoutId) clearTimeout(timeoutId);
+
+    timeoutId = setTimeout(() => {
+      func(...args);
+    }, delay);
+  };
 };
