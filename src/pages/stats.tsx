@@ -1,149 +1,235 @@
-import DeviceStats from "@/components/DeviceStats";
-import LocationStats from "@/components/LocationStats";
-import { Button } from "@/components/ui/button";
+import { useEffect } from "react";
+import { useNavigate, useParams } from "react-router-dom";
+import { ArrowLeft, Download, LinkIcon, Trash, Copy } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { RouteUrls } from "@/lib/constant";
+import { Button } from "@/components/ui/button";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { UrlState } from "@/lib/context/urlContext";
+import { RouteUrls } from "@/lib/constant";
 import useFetch from "@/lib/hooks/useFetchHook";
 import { deleteUrl, getClicksForUrl, getUrl } from "@/lib/services/urls";
 import { downloadImage } from "@/lib/utils";
-import { Copy, Download, LinkIcon, Trash } from "lucide-react";
-import { useEffect } from "react";
-import { useNavigate, useParams } from "react-router-dom";
-import { BarLoader, BeatLoader } from "react-spinners";
+import DeviceStats from "@/components/DeviceStats";
+import LocationStats from "@/components/LocationStats";
+import useCopy from "@/lib/hooks/useCopyHook";
 
 const LinkPage = () => {
   const navigate = useNavigate();
   const { user } = UrlState();
   const { id } = useParams();
+  const { copyText, isCopying } = useCopy();
+
   const {
     loading,
     data: url,
-    fn,
+    fn: fetchUrl,
     error,
-  } = useFetch(getUrl, { id, user_id: user?.id as string });
+  } = useFetch(getUrl, { id: id as string, user_id: user?.id as string });
 
   const {
     loading: loadingStats,
     data: stats,
-    fn: fnStats,
+    fn: fetchUrlClickStats,
   } = useFetch(getClicksForUrl, id);
 
   const { loading: loadingDelete, fn: fnDelete } = useFetch(deleteUrl, id);
 
   useEffect(() => {
-    fn();
+    fetchUrl();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
-    if (!error && loading === false) fnStats();
+    if (!error && !loading) fetchUrlClickStats();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [loading, error]);
 
   if (error) {
     navigate(RouteUrls.DASHBOARD);
+    return null;
   }
 
-  let link = "";
-  if (url) {
-    link = url?.custom_url ? url?.custom_url : url.short_url;
+  const handleDelete = () => {
+    fnDelete().then(() => {
+      navigate(RouteUrls.DASHBOARD);
+    });
+  };
+
+  const handleBack = () => navigate(RouteUrls.DASHBOARD);
+
+  if (loading || loadingStats) {
+    return (
+      <div className="flex flex-col items-center justify-center h-screen">
+        <div className="w-16 h-16 border-t-4 border-blue-500 border-solid rounded-full animate-spin"></div>
+        <p className="mt-4 text-lg font-semibold text-gray-700">
+          Loading stats...
+        </p>
+      </div>
+    );
   }
 
   return (
-    <>
-      {(loading || loadingStats) && (
-        <BarLoader className="mb-4" width={"100%"} color="#36d7b7" />
-      )}
-      <div className="flex flex-col gap-8 sm:flex-row justify-between">
-        <div className="flex flex-col items-start gap-8 rounded-lg sm:w-2/5">
-          <span className="text-6xl font-extrabold hover:underline cursor-pointer">
-            {url?.title}
-          </span>
-          <a
-            href={`https://trimrr.in/${link}`}
-            target="_blank"
-            className="text-3xl sm:text-4xl text-blue-400 font-bold hover:underline cursor-pointer"
-          >
-            https://trimrr.in/{link}
-          </a>
-          <a
-            href={url?.original_url}
-            target="_blank"
-            className="flex items-center gap-1 hover:underline cursor-pointer"
-          >
-            <LinkIcon className="p-1" />
-            {url?.original_url}
-          </a>
-          <span className="flex items-end font-extralight text-sm">
-            {new Date(url?.created_at).toLocaleString()}
-          </span>
-          <div className="flex gap-2">
-            <Button
-              variant="ghost"
-              onClick={() =>
-                navigator.clipboard.writeText(`https://trimrr.in/${link}`)
-              }
-            >
-              <Copy />
-            </Button>
-            <Button
-              variant="ghost"
-              onClick={() => downloadImage(url.qr_code as string, url.title)}
-            >
-              <Download />
-            </Button>
-            <Button
-              variant="ghost"
-              onClick={() =>
-                fnDelete().then(() => {
-                  navigate(RouteUrls.DASHBOARD);
-                })
-              }
-              disabled={loadingDelete}
-            >
-              {loadingDelete ? (
-                <BeatLoader size={5} color="white" />
-              ) : (
-                <Trash />
-              )}
-            </Button>
-          </div>
-          <img
-            src={url?.qr_code}
-            className="w-full self-center sm:self-start ring ring-blue-500 p-1 object-contain"
-            alt="qr code"
-          />
-        </div>
+    <div className="container mx-auto px-4 py-8">
+      <Button variant="outline" size="sm" onClick={handleBack} className="mb-4">
+        <ArrowLeft className="mr-2 h-4 w-4" />
+        Back to Dashboard
+      </Button>
 
-        <Card className="sm:w-3/5">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <Card className={url?.qr_code ? "lg:col-span-2" : "lg:col-span-3"}>
           <CardHeader>
-            <CardTitle className="text-4xl font-extrabold">Stats</CardTitle>
+            <CardTitle className="text-3xl font-bold">{url?.title}</CardTitle>
           </CardHeader>
-          {stats && stats.length ? (
-            <CardContent className="flex flex-col gap-6">
-              <Card>
-                <CardHeader>
-                  <CardTitle>Total Clicks</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <p>{stats?.length}</p>
-                </CardContent>
-              </Card>
-              <CardTitle>Location Data</CardTitle>
-              <LocationStats stats={stats} />
-              <CardTitle>Device Info</CardTitle>
-              <DeviceStats stats={stats} />
-            </CardContent>
-          ) : (
+          <CardContent className="space-y-6">
+            <div className="flex flex-col space-y-2">
+              <label className="text-sm font-medium text-gray-500">
+                Shortened URL
+              </label>
+              <div className="flex items-center space-x-2">
+                <a
+                  href={`https://trimrr.in/${url?.short_url}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-xl text-blue-500 font-semibold hover:underline"
+                >
+                  {`https://trimrr.in/${url?.short_url}`}
+                </a>
+              </div>
+            </div>
+            <div className="flex flex-col space-y-2">
+              <label className="text-sm font-medium text-gray-500">
+                Original URL
+              </label>
+              <a
+                href={url?.original_url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center text-blue-500 hover:underline"
+              >
+                <LinkIcon className="mr-2 h-4 w-4" />
+                {url?.original_url}
+              </a>
+            </div>
+            <div className="flex items-center justify-between">
+              <span className="text-sm text-gray-500">
+                Created on {new Date(url?.created_at).toLocaleString()}
+              </span>
+              <div className="flex space-x-2">
+                {url?.qr_code && (
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => downloadImage(url?.qr_code, url?.title)}
+                  >
+                    <Download className="mr-2 h-4 w-4" />
+                    Download QR
+                  </Button>
+                )}
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() =>
+                    copyText(
+                      `https://trimrr.in/${url?.custom_url || url?.short_url}`
+                    )
+                  }
+                >
+                  <Copy className="mr-2 h-4 w-4" />
+                  {isCopying ? "Copied!" : "Copy"}
+                </Button>
+                <Button
+                  variant="destructive"
+                  size="sm"
+                  onClick={handleDelete}
+                  disabled={loadingDelete}
+                >
+                  <Trash className="mr-2 h-4 w-4" />
+                  Delete
+                </Button>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+        {url?.qr_code && (
+          <Card>
+            <CardHeader>
+              <CardTitle>QR Code</CardTitle>
+            </CardHeader>
             <CardContent>
-              {loadingStats === false
-                ? "No Statistics yet"
-                : "Loading Statistics.."}
+              <img
+                src={url?.qr_code}
+                className="w-full object-contain border border-gray-200 rounded-lg"
+                alt="QR code"
+              />
             </CardContent>
-          )}
+          </Card>
+        )}
+        <Card className="lg:col-span-3">
+          <CardHeader>
+            <CardTitle className="text-2xl font-bold">Statistics</CardTitle>
+          </CardHeader>
+          <CardContent>
+            {stats && stats.length ? (
+              <Tabs defaultValue="overview">
+                <TabsList className="grid w-full grid-cols-3">
+                  <TabsTrigger value="overview">Overview</TabsTrigger>
+                  <TabsTrigger value="location">Location Data</TabsTrigger>
+                  <TabsTrigger value="device">Device Info</TabsTrigger>
+                </TabsList>
+                <TabsContent value="overview">
+                  <div className="mt-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                    <Card>
+                      <CardHeader>
+                        <CardTitle className="text-lg">Total Clicks</CardTitle>
+                      </CardHeader>
+                      <CardContent>
+                        <p className="text-2xl font-medium text-blue-500">
+                          {stats.length}
+                        </p>
+                      </CardContent>
+                    </Card>
+                    <Card>
+                      <CardHeader>
+                        <CardTitle className="text-lg">First Click</CardTitle>
+                      </CardHeader>
+                      <CardContent>
+                        <p className="text-2xl font-medium text-blue-500">
+                          {new Date(stats[0]?.created_at).toLocaleDateString()}
+                        </p>
+                      </CardContent>
+                    </Card>
+                    <Card>
+                      <CardHeader>
+                        <CardTitle className="text-lg">Last Click</CardTitle>
+                      </CardHeader>
+                      <CardContent>
+                        <p className="text-2xl font-medium text-blue-500">
+                          {new Date(
+                            stats[stats.length - 1]?.created_at
+                          ).toLocaleDateString()}
+                        </p>
+                      </CardContent>
+                    </Card>
+                  </div>
+                </TabsContent>
+                <TabsContent value="location">
+                  <LocationStats stats={stats} />
+                </TabsContent>
+                <TabsContent value="device">
+                  <DeviceStats stats={stats} />
+                </TabsContent>
+              </Tabs>
+            ) : (
+              <div className="text-center py-8">
+                <p className="text-xl text-gray-500">
+                  No statistics available yet
+                </p>
+              </div>
+            )}
+          </CardContent>
         </Card>
       </div>
-    </>
+    </div>
   );
 };
 

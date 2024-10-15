@@ -1,3 +1,4 @@
+import { UrlClicksDbInterface } from "@/lib/interfaces";
 import {
   LineChart,
   Line,
@@ -8,7 +9,11 @@ import {
   ResponsiveContainer,
 } from "recharts";
 
-export const LocationStats = ({ stats = [] }) => {
+interface LocationStatsProps {
+  stats: UrlClicksDbInterface[];
+}
+
+export const LocationStats: React.FC<LocationStatsProps> = ({ stats = [] }) => {
   const cityCount = stats.reduce((acc, item) => {
     if (acc[item.city]) {
       acc[item.city] += 1;
@@ -16,7 +21,7 @@ export const LocationStats = ({ stats = [] }) => {
       acc[item.city] = 1;
     }
     return acc;
-  }, {});
+  }, {} as Record<string, number>);
 
   const cities = Object.entries(cityCount).map(([city, count]) => ({
     city,

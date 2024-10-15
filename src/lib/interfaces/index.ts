@@ -27,3 +27,17 @@ export interface UrlsDbInterface {
   title: string;
   qr_code: string | null;
 }
+
+export interface UrlClicksDbInterface {
+  id: string;
+  created_at: string;
+  url_id: string;
+  city: string;
+  device: string;
+  country: string;
+}
+
+export interface LongUrlDbInterface {
+  id: string;
+  original_url: string;
+}

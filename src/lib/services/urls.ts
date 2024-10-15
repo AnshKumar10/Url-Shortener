@@ -1,20 +1,27 @@
 import supabase from "@/lib/services/db";
-import { CreateUrlInterface, UrlsDbInterface } from "@/lib/interfaces";
+import {
+  CreateUrlInterface,
+  LongUrlDbInterface,
+  UrlClicksDbInterface,
+  UrlsDbInterface,
+} from "@/lib/interfaces";
 import { generateShortUrl } from "@/lib/utils";
 import { UAParser } from "ua-parser-js";
 
-export const getClicksForUrls = async (urlIds: string[]) => {
+export const getClicksForUrls = async (
+  urlIds: string[]
+): Promise<UrlClicksDbInterface[]> => {
   const { data, error } = await supabase
     .from("url-click")
     .select("*")
     .in("url_id", urlIds);
 
   if (error) {
-    console.error("Error fetching clicks:", error);
-    return null;
+    console.error(error);
+    throw new Error("Unable to load URLs");
   }
 
-  return data;
+  return data as UrlClicksDbInterface[];
 };
 
 export const getUrls = async (userId: string): Promise<UrlsDbInterface[]> => {
@@ -32,14 +39,12 @@ export const getUrls = async (userId: string): Promise<UrlsDbInterface[]> => {
 };
 
 export const deleteUrl = async (urlId: string) => {
-  const { data, error } = await supabase.from("urls").delete().eq("id", urlId);
+  const { error } = await supabase.from("urls").delete().eq("id", urlId);
 
   if (error) {
     console.error(error);
     throw new Error("Unable to delete URL");
   }
-
-  return data;
 };
 
 export const createUrl = async ({
@@ -72,7 +77,7 @@ export const createUrl = async ({
   return data;
 };
 
-export const getLongUrl = async (id: string) => {
+export const getLongUrl = async (id: string): Promise<LongUrlDbInterface> => {
   const { data: shortLinkData, error: shortLinkError } = await supabase
     .from("urls")
     .select("id, original_url")
@@ -81,10 +86,10 @@ export const getLongUrl = async (id: string) => {
 
   if (shortLinkError && shortLinkError.code !== "PGRST116") {
     console.error("Error fetching short link:", shortLinkError);
-    return;
+    throw new Error("Error fetching short link");
   }
 
-  return shortLinkData;
+  return shortLinkData as LongUrlDbInterface;
 };
 
 export const storeUrlStats = async ({
@@ -116,7 +121,9 @@ export const storeUrlStats = async ({
   }
 };
 
-export const getClicksForUrl = async (id: string) => {
+export const getClicksForUrl = async (
+  id: string
+): Promise<UrlClicksDbInterface[]> => {
   const { data, error } = await supabase
     .from("url-click")
     .select("*")

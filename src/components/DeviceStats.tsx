@@ -1,15 +1,20 @@
+import { UrlClicksDbInterface } from "@/lib/interfaces";
 import { PieChart, Pie, Cell, ResponsiveContainer } from "recharts";
 
 const COLORS = ["#0088FE", "#00C49F", "#FFBB28", "#FF8042"];
 
-const DeviceStats = ({ stats }) => {
+interface DeviceStatsProps {
+  stats: UrlClicksDbInterface[];
+}
+
+const DeviceStats: React.FC<DeviceStatsProps> = ({ stats }) => {
   const deviceCount = stats.reduce((acc, item) => {
     if (!acc[item.device]) {
       acc[item.device] = 0;
     }
     acc[item.device]++;
     return acc;
-  }, {});
+  }, {} as Record<string, number>);
 
   const result = Object.keys(deviceCount).map((device) => ({
     device,

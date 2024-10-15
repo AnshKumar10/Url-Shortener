@@ -6,12 +6,19 @@ import { BarLoader } from "react-spinners";
 const RedirectLink = () => {
   const { id } = useParams();
 
-  const { loading: fetchingUrl, data: url, fn: getRedirectUrl } = useFetch(getLongUrl, id);
+  const {
+    loading: fetchingUrl,
+    data: url,
+    fn: getRedirectUrl,
+  } = useFetch(getLongUrl, id);
 
-  const { loading: fetchingUrlStats, fn: getUrlStats } = useFetch(storeUrlStats, {
-    id: url?.id,
-    originalUrl: url?.original_url,
-  });
+  const { loading: fetchingUrlStats, fn: getUrlStats } = useFetch(
+    storeUrlStats,
+    {
+      id: url?.id as string,
+      originalUrl: url?.original_url as string,
+    }
+  );
 
   useEffect(() => {
     getRedirectUrl();
