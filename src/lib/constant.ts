@@ -27,4 +27,4 @@ export const Faqs = [
   },
 ];
 
-export const BaseUrl = "https://SnipUrl.in/"
+export const BaseUrl = "https://snipurl-gules.vercel.app/"

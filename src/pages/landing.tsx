@@ -6,8 +6,7 @@ import {
 } from "@/components/ui/accordion";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Link, Zap, BarChart3, Shield } from "lucide-react";
-import { Faqs, LongUrlSearchParams, RouteUrls } from "@/lib/constant";
-import { useNavigate } from "react-router-dom";
+import { Faqs } from "@/lib/constant";
 import URLShortenerForm from "@/components/UrlShortenerForm";
 
 const LandingPage = () => {
@@ -34,12 +33,6 @@ const LandingPage = () => {
     },
   ];
 
-  const navigate = useNavigate();
-
-  const handleShortenUrl = (url: string) => {
-    navigate(`${RouteUrls.AUTH}?${LongUrlSearchParams}=${url}`);
-  };
-
   return (
     <div className="flex flex-col items-center">
       <main className="container mx-auto p-8">
@@ -50,7 +43,7 @@ const LandingPage = () => {
           <p className="text-xl text-gray-600 mb-8">
             The only URL shortener you'll ever need! 🚀
           </p>
-          <URLShortenerForm shortenUrl={handleShortenUrl} />
+          <URLShortenerForm />
         </section>
         <section className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
           {features.map((card, index) => (

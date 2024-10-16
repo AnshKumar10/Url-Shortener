@@ -3,12 +3,23 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Link } from "lucide-react";
 import { urlSchema } from "@/lib/schemas";
+import { useNavigate } from "react-router-dom";
+import { LongUrlSearchParams, RouteUrls } from "@/lib/constant";
+import { UrlState } from "@/lib/context/urlContext";
 
-interface URLShortenerFormPropsInterface {
-  shortenUrl: (url: string) => void;
-}
+const URLShortenerForm = () => {
+  const navigate = useNavigate();
 
-const URLShortenerForm: React.FC<URLShortenerFormPropsInterface> = ({ shortenUrl }) => {
+  const { user } = UrlState();
+
+  const handleShortenUrl = (url: string) => {
+    navigate(
+      `${
+        user ? RouteUrls.DASHBOARD : RouteUrls.AUTH
+      }?${LongUrlSearchParams}=${url}`
+    );
+  };
+
   return (
     <Formik
       initialValues={{
@@ -16,7 +27,7 @@ const URLShortenerForm: React.FC<URLShortenerFormPropsInterface> = ({ shortenUrl
       }}
       validationSchema={urlSchema}
       onSubmit={(values) => {
-        shortenUrl(values.url);
+        handleShortenUrl(values.url);
       }}
     >
       {() => (
@@ -38,7 +49,11 @@ const URLShortenerForm: React.FC<URLShortenerFormPropsInterface> = ({ shortenUrl
                 Shorten!
               </Button>
             </div>
-            <ErrorMessage name="url" component="div" className="text-start error-message" />
+            <ErrorMessage
+              name="url"
+              component="div"
+              className="text-start error-message"
+            />
           </div>
         </Form>
       )}

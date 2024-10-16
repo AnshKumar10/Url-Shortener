@@ -50,7 +50,7 @@ const LoginForm = () => {
     if (data) {
       fetchUser();
       navigate(
-        `/${RouteUrls.DASHBOARD}?${
+        `${RouteUrls.DASHBOARD}?${
           longLink ? `${LongUrlSearchParams}=${longLink}` : ""
         }`
       );

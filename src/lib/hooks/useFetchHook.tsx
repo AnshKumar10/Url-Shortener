@@ -18,7 +18,7 @@ const useFetch = <T, U = UseFetchOptions>(
   options: U = {} as U
 ): UseFetchReturn<T> => {
   const [data, setData] = useState<T | null>(null);
-  const [loading, setLoading] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<Error | null>(null);
 
   const fn = async (...args: unknown[]): Promise<void> => {

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useFormik } from "formik";
 import { CreateUrlShortenerFormSchema } from "@/lib/schemas";
 import {
@@ -16,6 +16,9 @@ import { Link, Globe, Scissors } from "lucide-react";
 import { createUrl } from "@/lib/services/urls";
 import useFetch from "@/lib/hooks/useFetchHook";
 import { UrlState } from "@/lib/context/urlContext";
+import { useSearchParams } from "react-router-dom";
+import { LongUrlSearchParams } from "@/lib/constant";
+import toast from "react-hot-toast";
 
 interface CreateUrlShortenerFormPropsInterface {
   fetchUrls: (...args: unknown[]) => Promise<void>;
@@ -24,7 +27,10 @@ interface CreateUrlShortenerFormPropsInterface {
 const CreateUrlShortenerForm: React.FC<
   CreateUrlShortenerFormPropsInterface
 > = ({ fetchUrls }) => {
-  const [open, setOpen] = useState(false);
+  const [searchParams] = useSearchParams();
+  const longLink = searchParams.get(LongUrlSearchParams);
+
+  const [showCreateUrlForm, setShowCreateUrlForm] = useState(false);
   const { user } = UrlState();
 
   const formik = useFormik({
@@ -34,11 +40,23 @@ const CreateUrlShortenerForm: React.FC<
       customUrl: "",
     },
     validationSchema: CreateUrlShortenerFormSchema,
-    onSubmit: (_values, { setSubmitting }) => {
-      setSubmitting(false);
-      setOpen(false);
-      handleCreateUrl().then(() => fetchUrls());
-      formik.resetForm();
+    onSubmit: async (_values, { setSubmitting }) => {
+      try {
+        setSubmitting(true);
+        await handleCreateUrl();
+        toast.success("URL created successfully!");
+        toast.promise(fetchUrls(), {
+          loading: "Updating URLs...",
+          success: "URLs updated successfully!",
+          error: "Failed to fetch URLs.",
+        });
+        formik.resetForm();
+        setShowCreateUrlForm(false);
+      } catch {
+        toast.error("Failed to create URL.");
+      } finally {
+        setSubmitting(false);
+      }
     },
   });
 
@@ -47,8 +65,16 @@ const CreateUrlShortenerForm: React.FC<
     userId: user?.id as string,
   });
 
+  useEffect(() => {
+    if (longLink) {
+      setShowCreateUrlForm(true);
+      formik.setFieldValue("longUrl", longLink);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [longLink]);
+
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
+    <Dialog open={showCreateUrlForm} onOpenChange={setShowCreateUrlForm}>
       <DialogTrigger asChild>
         <Button variant="outline" className="flex items-center gap-2">
           <Scissors className="h-4 w-4" />
