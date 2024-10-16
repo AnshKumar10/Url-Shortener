@@ -18,6 +18,7 @@ import { UrlState } from "@/lib/context/urlContext";
 import { LongUrlSearchParams, RouteUrls } from "@/lib/constant";
 import { useEffect } from "react";
 import useFetch from "@/lib/hooks/useFetchHook";
+import toast from "react-hot-toast";
 
 const LoginForm = () => {
   const [searchParams] = useSearchParams();
@@ -29,18 +30,24 @@ const LoginForm = () => {
     initialValues: { email: "", password: "" },
     validationSchema: loginFormSchema,
     onSubmit: async () => {
-      try {
-        await loginUser();
-      } catch (error) {
-        console.log(error);
-      }
+      await loginUser();
     },
   });
 
-  const { error, loading, fn: loginUser, data } = useFetch(login, formik.values);
+  const {
+    error,
+    loading,
+    fn: loginUser,
+    data,
+  } = useFetch(login, formik.values);
 
   useEffect(() => {
-    if (!error && data) {
+    if (error) {
+      toast.error(error.message);
+      return;
+    }
+
+    if (data) {
       fetchUser();
       navigate(
         `/${RouteUrls.DASHBOARD}?${
@@ -100,8 +107,12 @@ const LoginForm = () => {
             </div>
           </div>
           <CardFooter className="flex flex-col p-0 space-y-4">
-            <Button type="submit" className="w-full">
-              Login
+            <Button
+              disabled={formik.isSubmitting}
+              type="submit"
+              className="w-full"
+            >
+              {formik.isSubmitting ? "Logging in..." : "Login"}
             </Button>
           </CardFooter>
         </form>

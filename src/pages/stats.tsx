@@ -12,6 +12,7 @@ import { downloadImage } from "@/lib/utils";
 import DeviceStats from "@/components/DeviceStats";
 import LocationStats from "@/components/LocationStats";
 import useCopy from "@/lib/hooks/useCopyHook";
+import toast from "react-hot-toast";
 
 const LinkPage = () => {
   const navigate = useNavigate();
@@ -32,7 +33,10 @@ const LinkPage = () => {
     fn: fetchUrlClickStats,
   } = useFetch(getClicksForUrl, id);
 
-  const { loading: loadingDelete, fn: fnDelete } = useFetch(deleteUrl, id);
+  const { loading: loadingDelete, fn: handleDeleteUrl } = useFetch(
+    deleteUrl,
+    id
+  );
 
   useEffect(() => {
     fetchUrl();
@@ -49,10 +53,14 @@ const LinkPage = () => {
     return null;
   }
 
-  const handleDelete = () => {
-    fnDelete().then(() => {
+  const handleDelete = async () => {
+    try {
+      await handleDeleteUrl();
+      toast.success("Deleted successfully");
       navigate(RouteUrls.DASHBOARD);
-    });
+    } catch {
+      toast.error("Error deleting link");
+    }
   };
 
   const handleBack = () => navigate(RouteUrls.DASHBOARD);
@@ -129,9 +137,7 @@ const LinkPage = () => {
                   variant="outline"
                   size="sm"
                   onClick={() =>
-                    copyText(
-                      `${BaseUrl}${url?.custom_url || url?.short_url}`
-                    )
+                    copyText(`${BaseUrl}${url?.custom_url || url?.short_url}`)
                   }
                 >
                   <Copy className="mr-2 h-4 w-4" />

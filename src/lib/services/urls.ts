@@ -41,10 +41,7 @@ export const getUrls = async (userId: string): Promise<UrlsDbInterface[]> => {
 export const deleteUrl = async (urlId: string) => {
   const { error } = await supabase.from("urls").delete().eq("id", urlId);
 
-  if (error) {
-    console.error(error);
-    throw new Error("Unable to delete URL");
-  }
+  if (error) throw new Error("Unable to delete URL");
 };
 
 export const createUrl = async ({

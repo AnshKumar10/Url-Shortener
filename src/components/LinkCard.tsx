@@ -26,6 +26,7 @@ import useFetch from "@/lib/hooks/useFetchHook";
 import { UrlsDbInterface } from "@/lib/interfaces";
 import useCopy from "@/lib/hooks/useCopyHook";
 import { BaseUrl } from "@/lib/constant";
+import toast from "react-hot-toast";
 
 interface LinkCardProps {
   url: UrlsDbInterface;
@@ -34,6 +35,19 @@ interface LinkCardProps {
 
 const LinkCard: React.FC<LinkCardProps> = ({ url, fetchUrls }) => {
   const { fn: handleDeleteUrl } = useFetch(deleteUrl, url?.id);
+
+  const handleDeleteClick = async () => {
+    try {
+      await handleDeleteUrl();
+      toast.success("Deleted successfully");
+      fetchUrls();
+    } catch {
+      toast.error("Error deleting link");
+    }
+  };
+
+  // Usage in your component
+  <button onClick={handleDeleteClick}>Delete URL</button>;
 
   const { copyText, isCopying } = useCopy();
 
@@ -79,7 +93,8 @@ const LinkCard: React.FC<LinkCardProps> = ({ url, fetchUrls }) => {
               rel="noopener noreferrer"
               className="text-primary hover:underline flex items-center gap-1 truncate"
             >
-              {BaseUrl}{url?.custom_url || url.short_url}
+              {BaseUrl}
+              {url?.custom_url || url.short_url}
               <ExternalLink className="h-3 w-3 flex-shrink-0" />
             </a>
           </div>
@@ -138,11 +153,7 @@ const LinkCard: React.FC<LinkCardProps> = ({ url, fetchUrls }) => {
         <TooltipProvider>
           <Tooltip>
             <TooltipTrigger asChild>
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={() => handleDeleteUrl().then(() => fetchUrls())}
-              >
+              <Button variant="outline" size="sm" onClick={handleDeleteClick}>
                 <Trash className="h-4 w-4 mr-2 text-red-500" /> Delete
               </Button>
             </TooltipTrigger>

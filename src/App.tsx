@@ -9,6 +9,7 @@ import UrlContextProvider from "@/lib/context/urlContext";
 import RequireAuth from "@/layouts/required-auth";
 import RedirectLink from "@/pages/redirect";
 import Stats from "@/pages/stats";
+import { Toaster } from "react-hot-toast";
 
 const router = createBrowserRouter([
   {
@@ -49,6 +50,7 @@ const router = createBrowserRouter([
 function App() {
   return (
     <UrlContextProvider>
+      <Toaster position="top-right" reverseOrder={false} />
       <RouterProvider router={router} />
     </UrlContextProvider>
   );

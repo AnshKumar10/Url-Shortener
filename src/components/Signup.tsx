@@ -17,6 +17,7 @@ import { useNavigate, useSearchParams } from "react-router-dom";
 import useFetch from "@/lib/hooks/useFetchHook";
 import { useEffect } from "react";
 import { LongUrlSearchParams, RouteUrls } from "@/lib/constant";
+import toast from "react-hot-toast";
 
 const SignupForm = () => {
   const [searchParams] = useSearchParams();
@@ -48,7 +49,12 @@ const SignupForm = () => {
   } = useFetch(signup, formik.values);
 
   useEffect(() => {
-    if (error === null && data) {
+    if (error) {
+      toast.error(error.message);
+      return;
+    }
+
+    if (data) {
       navigate(
         `/${RouteUrls.DASHBOARD}?${
           longLink ? `${LongUrlSearchParams}=${longLink}` : ""
@@ -146,8 +152,12 @@ const SignupForm = () => {
             </div>
           </div>
           <CardFooter className="p-0">
-            <Button type="submit" className="w-full">
-              Create Account
+            <Button
+              type="submit"
+              disabled={formik.isSubmitting}
+              className="w-full"
+            >
+              {formik.isSubmitting ? "Creating..." : "Create Account"}
             </Button>
           </CardFooter>
         </form>

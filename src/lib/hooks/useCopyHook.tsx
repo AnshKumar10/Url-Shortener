@@ -1,4 +1,5 @@
 import { useState } from "react";
+import toast from "react-hot-toast";
 
 const useCopy = () => {
   const [isCopying, setIsCopying] = useState(false);
@@ -6,6 +7,7 @@ const useCopy = () => {
   const copyText = async (text: string) => {
     try {
       await navigator.clipboard.writeText(text);
+      toast.success("Copied");
       setIsCopying(true);
       setTimeout(() => {
         setIsCopying(false);
