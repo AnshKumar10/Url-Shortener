@@ -8,7 +8,7 @@ interface UseFetchOptions {
 
 interface UseFetchReturn<T> {
   data: T | null;
-  loading: boolean;
+  loading: boolean | null;
   error: Error | null;
   fn: (...args: unknown[]) => Promise<void>;
 }
@@ -18,7 +18,7 @@ const useFetch = <T, U = UseFetchOptions>(
   options: U = {} as U
 ): UseFetchReturn<T> => {
   const [data, setData] = useState<T | null>(null);
-  const [loading, setLoading] = useState<boolean>(true);
+  const [loading, setLoading] = useState<boolean | null>(null);
   const [error, setError] = useState<Error | null>(null);
 
   const fn = async (...args: unknown[]): Promise<void> => {

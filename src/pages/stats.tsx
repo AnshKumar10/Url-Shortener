@@ -147,7 +147,7 @@ const LinkPage = () => {
                   variant="destructive"
                   size="sm"
                   onClick={handleDelete}
-                  disabled={loadingDelete}
+                  disabled={!!loadingDelete}
                 >
                   <Trash className="mr-2 h-4 w-4" />
                   Delete

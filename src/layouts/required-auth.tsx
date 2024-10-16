@@ -10,7 +10,7 @@ const RequireAuth: React.FC<{ children: ReactNode }> = ({ children }) => {
   const { loading, isAuthenticated } = UrlState();
 
   useEffect(() => {
-    if (!isAuthenticated && !loading) navigate(RouteUrls.AUTH);
+    if (!isAuthenticated && loading === false) navigate(RouteUrls.AUTH);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isAuthenticated, loading]);
 

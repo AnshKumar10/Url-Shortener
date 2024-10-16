@@ -16,10 +16,7 @@ export const getClicksForUrls = async (
     .select("*")
     .in("url_id", urlIds);
 
-  if (error) {
-    console.error(error);
-    throw new Error("Unable to load URLs");
-  }
+  if (error) throw new Error("Unable to load URLs");
 
   return data as UrlClicksDbInterface[];
 };
@@ -30,10 +27,7 @@ export const getUrls = async (userId: string): Promise<UrlsDbInterface[]> => {
     .select("*")
     .eq("user_id", userId);
 
-  if (error) {
-    console.error(error);
-    throw new Error("Unable to load URLs");
-  }
+  if (error) throw new Error("Unable to load URLs");
 
   return data as UrlsDbInterface[];
 };
@@ -66,23 +60,19 @@ export const createUrl = async ({
     ])
     .select();
 
-  if (error) {
-    console.error(error);
-    throw new Error("Error creating short URL");
-  }
+  if (error) throw new Error("Error creating short URL");
 
   return data;
 };
 
-export const getLongUrl = async (id: string): Promise<LongUrlDbInterface> => {
+export const getLongUrl = async (url: string): Promise<LongUrlDbInterface> => {
   const { data: shortLinkData, error: shortLinkError } = await supabase
     .from("urls")
     .select("id, original_url")
-    .or(`short_url.eq.${id},custom_url.eq.${id}`)
+    .or(`short_url.eq.${url},custom_url.eq.${url}`)
     .single();
 
   if (shortLinkError && shortLinkError.code !== "PGRST116") {
-    console.error("Error fetching short link:", shortLinkError);
     throw new Error("Error fetching short link");
   }
 
@@ -100,7 +90,7 @@ export const storeUrlStats = async ({
 
   try {
     const res = parser.getResult();
-    const device = res?.device || "desktop";
+    const device = res?.device?.type || "desktop";
 
     const response = await fetch("https://ipapi.co/json");
     const { city, country_name: country } = await response.json();
@@ -113,8 +103,8 @@ export const storeUrlStats = async ({
     });
 
     window.location.href = originalUrl;
-  } catch (error) {
-    console.error("Error recording click:", error);
+  } catch {
+    throw new Error("Failed to store stats");
   }
 };
 
@@ -126,10 +116,7 @@ export const getClicksForUrl = async (
     .select("*")
     .eq("url_id", id);
 
-  if (error) {
-    console.error(error);
-    throw new Error("Unable to load Stats");
-  }
+  if (error) throw new Error("Unable to load Stats");
 
   return data;
 };
@@ -148,10 +135,7 @@ export const getUrl = async ({
     .eq("user_id", user_id)
     .single();
 
-  if (error) {
-    console.error(error);
-    throw new Error("Short Url not found");
-  }
+  if (error) throw new Error("Short Url not found");
 
   return data;
 };

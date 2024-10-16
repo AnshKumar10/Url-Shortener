@@ -26,9 +26,8 @@ const RedirectLink = () => {
   }, []);
 
   useEffect(() => {
-    if (!fetchingUrl && url) {
-      getUrlStats();
-    }
+    if (!fetchingUrl && url) getUrlStats();
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [fetchingUrl]);
 

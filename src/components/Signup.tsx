@@ -33,11 +33,7 @@ const SignupForm = () => {
     },
     validationSchema: signUpFormSchema,
     onSubmit: async () => {
-      try {
-        await signupUser();
-      } catch (error) {
-        console.log(error);
-      }
+      await signupUser();
     },
   });
 
@@ -50,7 +46,7 @@ const SignupForm = () => {
 
   useEffect(() => {
     if (error) {
-      toast.error(error.message);
+      toast.error(error?.message);
       return;
     }
 
