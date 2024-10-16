@@ -6,7 +6,7 @@ import { User } from "@supabase/supabase-js";
 interface UrlContextValue {
   user: User | null;
   fetchUser: () => Promise<void>;
-  loading: boolean;
+  loading: boolean | null;
   isAuthenticated: boolean;
 }
 
