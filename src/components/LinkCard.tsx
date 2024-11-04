@@ -27,6 +27,17 @@ import { UrlsDbInterface } from "@/lib/interfaces";
 import useCopy from "@/lib/hooks/useCopyHook";
 import { BaseUrl } from "@/lib/constant";
 import toast from "react-hot-toast";
+import {
+  AlertDialog,
+  AlertDialogTrigger,
+  AlertDialogContent,
+  AlertDialogTitle,
+  AlertDialogDescription,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogHeader,
+  AlertDialogFooter,
+} from "@/components/ui/alert-dialog";
 
 interface LinkCardProps {
   url: UrlsDbInterface;
@@ -45,10 +56,6 @@ const LinkCard: React.FC<LinkCardProps> = ({ url, fetchUrls }) => {
       toast.error("Error deleting link");
     }
   };
-
-  // Usage in your component
-  <button onClick={handleDeleteClick}>Delete URL</button>;
-
   const { copyText, isCopying } = useCopy();
 
   return (
@@ -150,18 +157,37 @@ const LinkCard: React.FC<LinkCardProps> = ({ url, fetchUrls }) => {
             </Tooltip>
           </TooltipProvider>
         )}
-        <TooltipProvider>
-          <Tooltip>
-            <TooltipTrigger asChild>
-              <Button variant="outline" size="sm" onClick={handleDeleteClick}>
-                <Trash className="h-4 w-4 mr-2 text-red-500" /> Delete
-              </Button>
-            </TooltipTrigger>
-            <TooltipContent>
-              <p>Delete URL</p>
-            </TooltipContent>
-          </Tooltip>
-        </TooltipProvider>
+        <AlertDialog>
+          <TooltipProvider>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <AlertDialogTrigger asChild>
+                  <Button variant="outline" size="sm">
+                    <Trash className="h-4 w-4 mr-2 text-red-500" /> Delete
+                  </Button>
+                </AlertDialogTrigger>
+              </TooltipTrigger>
+              <TooltipContent>
+                <p>Delete URL</p>
+              </TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
+          <AlertDialogContent>
+            <AlertDialogHeader>
+              <AlertDialogTitle>Confirm Deletion</AlertDialogTitle>
+              <AlertDialogDescription>
+                Are you sure you want to delete this link? This action cannot be
+                undone.
+              </AlertDialogDescription>
+            </AlertDialogHeader>
+            <AlertDialogFooter>
+              <AlertDialogCancel>Cancel</AlertDialogCancel>
+              <AlertDialogAction onClick={handleDeleteClick}>
+                Delete
+              </AlertDialogAction>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialog>
       </CardFooter>
     </Card>
   );

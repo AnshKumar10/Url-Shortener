@@ -13,6 +13,23 @@ import DeviceStats from "@/components/DeviceStats";
 import LocationStats from "@/components/LocationStats";
 import useCopy from "@/lib/hooks/useCopyHook";
 import toast from "react-hot-toast";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
+import {
+  AlertDialog,
+  AlertDialogTrigger,
+  AlertDialogContent,
+  AlertDialogTitle,
+  AlertDialogDescription,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogHeader,
+  AlertDialogFooter,
+} from "@/components/ui/alert-dialog";
 
 const LinkPage = () => {
   const navigate = useNavigate();
@@ -143,15 +160,43 @@ const LinkPage = () => {
                   <Copy className="mr-2 h-4 w-4" />
                   {isCopying ? "Copied!" : "Copy"}
                 </Button>
-                <Button
-                  variant="destructive"
-                  size="sm"
-                  onClick={handleDelete}
-                  disabled={!!loadingDelete}
-                >
-                  <Trash className="mr-2 h-4 w-4" />
-                  Delete
-                </Button>
+
+                <AlertDialog>
+                  <TooltipProvider>
+                    <Tooltip>
+                      <TooltipTrigger asChild>
+                        <AlertDialogTrigger asChild>
+                          <Button
+                            variant="destructive"
+                            size="sm"
+                            disabled={!!loadingDelete}
+                          >
+                            <Trash className="mr-2 h-4 w-4" />
+                            Delete
+                          </Button>
+                        </AlertDialogTrigger>
+                      </TooltipTrigger>
+                      <TooltipContent>
+                        <p>Delete URL</p>
+                      </TooltipContent>
+                    </Tooltip>
+                  </TooltipProvider>
+                  <AlertDialogContent>
+                    <AlertDialogHeader>
+                      <AlertDialogTitle>Confirm Deletion</AlertDialogTitle>
+                      <AlertDialogDescription>
+                        Are you sure you want to delete this link? This action
+                        cannot be undone.
+                      </AlertDialogDescription>
+                    </AlertDialogHeader>
+                    <AlertDialogFooter>
+                      <AlertDialogCancel>Cancel</AlertDialogCancel>
+                      <AlertDialogAction onClick={handleDelete}>
+                        Delete
+                      </AlertDialogAction>
+                    </AlertDialogFooter>
+                  </AlertDialogContent>
+                </AlertDialog>
               </div>
             </div>
           </CardContent>

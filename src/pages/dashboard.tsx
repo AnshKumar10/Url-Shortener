@@ -87,9 +87,19 @@ const Dashboard = () => {
             <BarLoader width={"100%"} color="#2563EB" />
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 p-4">
-              {(filteredUrls || []).map((url) => (
-                <LinkCard key={url.id} url={url} fetchUrls={fetchUrls} />
-              ))}
+              {filteredUrls?.length === 0 ? (
+                <div className="col-span-1 md:col-span-2 lg:col-span-3 text-center p-6 border rounded-md shadow-md">
+                  <h2 className="text-lg font-bold mb-2">No URLs Found</h2>
+                  <p className="text-sm text-muted-foreground mb-4">
+                    It seems you haven't added any URLs yet. Start by creating a
+                    new one!
+                  </p>
+                </div>
+              ) : (
+                filteredUrls?.map((url) => (
+                  <LinkCard key={url.id} url={url} fetchUrls={fetchUrls} />
+                ))
+              )}
             </div>
           )}
         </CardContent>
