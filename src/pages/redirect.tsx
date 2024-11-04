@@ -33,14 +33,16 @@ const RedirectLink = () => {
 
   if (fetchingUrl || fetchingUrlStats) {
     return (
-      <div className="flex flex-col items-center justify-center h-screen bg-gray-100">
-        <div className="flex items-center mb-4">
+      <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100 p-4 sm:p-8 md:p-16">
+        <div className="flex items-center mb-4 w-full max-w-lg">
           <BarLoader width={"100%"} color="#36d7b7" />
         </div>
-        <h2 className="text-lg font-semibold text-gray-700">
+        <h2 className="text-lg sm:text-xl md:text-2xl font-semibold text-gray-700 text-center mb-2">
           Please wait, we are redirecting you to your link...
         </h2>
-        <p className="text-gray-500">This may take a few seconds.</p>
+        <p className="text-gray-500 text-center">
+          This may take a few seconds.
+        </p>
       </div>
     );
   }

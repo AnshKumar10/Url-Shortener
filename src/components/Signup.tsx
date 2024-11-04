@@ -60,6 +60,10 @@ const SignupForm = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [loading, error]);
 
+  const setProfilePic = (event: React.ChangeEvent<HTMLInputElement>) => {
+    formik.setFieldValue("profilePic", event?.currentTarget?.files?.[0]);
+  };
+
   return (
     <Card className="w-full max-w-md mx-auto">
       <CardHeader>
@@ -135,12 +139,7 @@ const SignupForm = () => {
                 type="file"
                 accept="image/*"
                 className="pl-8"
-                onChange={(event) => {
-                  formik.setFieldValue(
-                    "profilePic",
-                    event?.currentTarget?.files?.[0]
-                  );
-                }}
+                onChange={setProfilePic}
               />
               {formik.touched.profilePic && formik.errors.profilePic && (
                 <div className="error-message">{formik.errors.profilePic}</div>

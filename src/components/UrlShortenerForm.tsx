@@ -31,29 +31,33 @@ const URLShortenerForm = () => {
       }}
     >
       {() => (
-        <Form className="w-full max-w-2xl mx-auto">
-          <div className="space-y-2">
-            <div className="flex space-x-2">
-              <div className="relative flex-grow">
-                <Link className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
+        <Form className="w-full mx-auto p-4 sm:p-6">
+          <div className="space-y-4">
+            <div className="relative flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-2">
+              <div className="flex-grow">
+                <Link className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
                 <Field
                   as={Input}
                   id="url"
                   name="url"
                   type="text"
-                  placeholder="Enter your long Url"
-                  className="pl-8 pr-2 py-2 w-full"
+                  placeholder="Enter your long URL"
+                  className="pl-10 pr-2 py-2 w-full border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                />
+                <ErrorMessage
+                  name="url"
+                  component="div"
+                  className="text-start error-message"
                 />
               </div>
-              <Button type="submit" className="h-10 px-8" size="lg">
+              <Button
+                type="submit"
+                className="h-10 px-4 sm:px-8 mt-2 w-full sm:w-auto"
+                size="lg"
+              >
                 Shorten!
               </Button>
             </div>
-            <ErrorMessage
-              name="url"
-              component="div"
-              className="text-start error-message"
-            />
           </div>
         </Form>
       )}
