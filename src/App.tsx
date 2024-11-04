@@ -10,6 +10,7 @@ import RequireAuth from "@/layouts/required-auth";
 import RedirectLink from "@/pages/redirect";
 import Stats from "@/pages/stats";
 import { Toaster } from "react-hot-toast";
+import Profile from "@/pages/profile";
 
 const router = createBrowserRouter([
   {
@@ -32,7 +33,7 @@ const router = createBrowserRouter([
         ),
       },
       {
-        path: "/:id",
+        path: "redirect/:id",
         element: <RedirectLink />,
       },
       {
@@ -40,6 +41,14 @@ const router = createBrowserRouter([
         element: (
           <RequireAuth>
             <Stats />
+          </RequireAuth>
+        ),
+      },
+      {
+        path: RouteUrls.SETTING_PROFILE,
+        element: (
+          <RequireAuth>
+            <Profile />
           </RequireAuth>
         ),
       },

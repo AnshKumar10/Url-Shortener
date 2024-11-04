@@ -2,6 +2,7 @@ export const RouteUrls = {
   ROOT: "/",
   AUTH: "/auth",
   DASHBOARD: "/dashboard",
+  SETTING_PROFILE: "/profile",
 };
 
 export const LongUrlSearchParams = "create";
@@ -27,4 +28,4 @@ export const Faqs = [
   },
 ];
 
-export const BaseUrl = "https://snipurl-gules.vercel.app/"
+export const BaseUrl = "https://snipurl-gules.vercel.app/";

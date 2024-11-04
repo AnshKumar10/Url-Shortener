@@ -1,5 +1,6 @@
-import supabase, { supabaseUrl } from "@/lib/services/db";
+import supabase from "@/lib/services/db";
 import { LoginFormInterface, SignupFormInterface } from "@/lib/interfaces";
+import { uploadProfilePic } from "./user";
 
 export const login = async ({ email, password }: LoginFormInterface) => {
   const { data, error } = await supabase.auth.signInWithPassword({
@@ -18,13 +19,9 @@ export const signup = async ({
   password,
   profilePic,
 }: SignupFormInterface) => {
-  const fileName = `dp-${name.split(" ").join("-")}-${Math.random()}`;
+  let profile_pic: string | null = null;
 
-  const { error: storageError } = await supabase.storage
-    .from("profile-pic")
-    .upload(fileName, profilePic as File);
-
-  if (storageError) throw new Error(storageError.message);
+  if (profilePic) profile_pic = await uploadProfilePic(name, profilePic);
 
   const { data, error } = await supabase.auth.signUp({
     email,
@@ -32,7 +29,7 @@ export const signup = async ({
     options: {
       data: {
         name,
-        profile_pic: `${supabaseUrl}/storage/v1/object/public/profile-pic/${fileName}`,
+        profile_pic,
       },
     },
   });

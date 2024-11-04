@@ -56,6 +56,7 @@ const LinkCard: React.FC<LinkCardProps> = ({ url, fetchUrls }) => {
       toast.error("Error deleting link");
     }
   };
+  
   const { copyText, isCopying } = useCopy();
 
   return (
