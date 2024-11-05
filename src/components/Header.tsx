@@ -19,9 +19,21 @@ import {
 const Header = () => {
   const navigate = useNavigate();
   const { user, fetchUser } = UrlState();
-  const { loading, fn: fnLogout } = useFetch(logout);
+  const { loading, fn: logoutUser } = useFetch(logout);
 
-  const navItems = [
+  type NavItemType = {
+    label: string;
+    onClick: () => void;
+    variant:
+      | "ghost"
+      | "default"
+      | "link"
+      | "destructive"
+      | "outline"
+      | "secondary";
+  };
+
+  const navItems: NavItemType[] = [
     {
       label: "Login",
       onClick: () => navigate(RouteUrls.AUTH),
@@ -49,7 +61,7 @@ const Header = () => {
       label: "Logout",
       icon: <LogOut className="mr-2 h-4 w-4" />,
       action: async () => {
-        await fnLogout();
+        await logoutUser();
         fetchUser();
         navigate(RouteUrls.AUTH);
       },
@@ -80,7 +92,7 @@ const Header = () => {
               ))
             ) : (
               <DropdownMenu>
-                <DropdownMenuTrigger className="w-10 rounded-full overflow-hidden">
+                <DropdownMenuTrigger>
                   <Avatar>
                     <AvatarImage src={user?.user_metadata?.profile_pic} />
                     <AvatarFallback>{user?.user_metadata?.name}</AvatarFallback>
