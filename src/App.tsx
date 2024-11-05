@@ -1,4 +1,5 @@
 import "./App.css";
+import { Analytics } from '@vercel/analytics/react';
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import AppLayout from "@/layouts/app-layout";
 import Landing from "@/pages/landing";
@@ -56,13 +57,14 @@ const router = createBrowserRouter([
   },
 ]);
 
-function App() {
+const App = () => {
   return (
     <UrlContextProvider>
+      <Analytics />
       <Toaster position="top-right" reverseOrder={false} />
       <RouterProvider router={router} />
     </UrlContextProvider>
   );
-}
+};
 
 export default App;
