@@ -130,7 +130,9 @@ const LinkCard: React.FC<LinkCardProps> = ({ url, fetchUrls }) => {
               <Button
                 variant="outline"
                 size="sm"
-                onClick={() => copyText(`${BaseUrl}${url?.short_url}`)}
+                onClick={() =>
+                  copyText(`${BaseUrl}${url?.custom_url || url.short_url}`)
+                }
               >
                 <Copy className="h-4 w-4 mr-2" />
                 {isCopying ? "Copied!" : "Copy"}
