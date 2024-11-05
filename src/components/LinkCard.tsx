@@ -56,7 +56,7 @@ const LinkCard: React.FC<LinkCardProps> = ({ url, fetchUrls }) => {
       toast.error("Error deleting link");
     }
   };
-  
+
   const { copyText, isCopying } = useCopy();
 
   return (
@@ -80,6 +80,7 @@ const LinkCard: React.FC<LinkCardProps> = ({ url, fetchUrls }) => {
         <div className="flex-1 text-center sm:text-left">
           <CardTitle className="text-xl sm:text-2xl font-bold">
             <Link
+              title={url?.title}
               to={`/link/${url?.id}`}
               className="hover:text-primary transition-colors"
             >
@@ -97,6 +98,7 @@ const LinkCard: React.FC<LinkCardProps> = ({ url, fetchUrls }) => {
             <LinkIcon className="h-4 w-4 text-primary flex-shrink-0" />
             <a
               href={`${BaseUrl}${url?.custom_url || url.short_url}`}
+              title={`${BaseUrl}${url?.custom_url || url.short_url}`}
               target="_blank"
               rel="noopener noreferrer"
               className="text-primary hover:underline flex items-center gap-1 truncate"
@@ -110,6 +112,7 @@ const LinkCard: React.FC<LinkCardProps> = ({ url, fetchUrls }) => {
             <LinkIcon className="h-4 w-4 text-muted-foreground flex-shrink-0" />
             <a
               href={url?.original_url}
+              title={url?.original_url}
               target="_blank"
               rel="noopener noreferrer"
               className="text-sm text-muted-foreground hover:underline truncate flex items-center gap-1"

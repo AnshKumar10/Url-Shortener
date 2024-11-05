@@ -154,7 +154,7 @@ const Profile = () => {
                     defaultValue={user?.user_metadata?.email}
                   />
                 </div>
-                <div className="space-y-2">
+                {/* <div className="space-y-2">
                   <Label htmlFor="phone" className="text-base">
                     Phone Number
                   </Label>
@@ -169,7 +169,7 @@ const Profile = () => {
                       {formik.errors.phone}
                     </div>
                   ) : null}
-                </div>
+                </div> */}
               </div>
 
               {isEditing && (
@@ -199,14 +199,14 @@ const Profile = () => {
             </form>
 
             {/* Additional Actions */}
-            <div className="flex flex-col space-y-2 mt-6">
+            {/* <div className="flex flex-col space-y-2 mt-6">
               <Button type="button" variant="outline">
                 Forgot Password
               </Button>
               <Button type="button" variant="outline" className="text-red-600">
                 Delete Account
               </Button>
-            </div>
+            </div> */}
           </CardContent>
         </Card>
       </div>
