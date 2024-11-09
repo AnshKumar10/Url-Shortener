@@ -82,6 +82,8 @@ const LinkPage = () => {
 
   const handleBack = () => navigate(RouteUrls.DASHBOARD);
 
+  const redirectUrl = `${BaseUrl}redirect/${url?.custom_url || url?.short_url}`;
+
   if (loading || loadingStats) {
     return (
       <div className="flex flex-col items-center justify-center h-screen">
@@ -112,12 +114,8 @@ const LinkPage = () => {
               </label>
               <div className="flex items-center space-x-2">
                 <a
-                  href={`${BaseUrl}redirect/${
-                    url?.custom_url || url.short_url
-                  }`}
-                  title={`${BaseUrl}redirect/${
-                    url?.custom_url || url.short_url
-                  }`}
+                  href={redirectUrl}
+                  title={redirectUrl}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="text-xl text-blue-500 font-semibold hover:underline"
@@ -158,9 +156,7 @@ const LinkPage = () => {
                 <Button
                   variant="outline"
                   size="sm"
-                  onClick={() =>
-                    copyText(`${BaseUrl}${url?.custom_url || url?.short_url}`)
-                  }
+                  onClick={() => copyText(redirectUrl)}
                 >
                   <Copy className="mr-2 h-4 w-4" />
                   {isCopying ? "Copied!" : "Copy"}

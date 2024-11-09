@@ -59,6 +59,8 @@ const LinkCard: React.FC<LinkCardProps> = ({ url, fetchUrls }) => {
 
   const { copyText, isCopying } = useCopy();
 
+  const redirectUrl = `${BaseUrl}redirect/${url?.custom_url || url?.short_url}`;
+
   return (
     <Card className="w-full max-w-2xl bg-card hover:shadow-lg transition-shadow duration-300">
       <CardHeader className="flex flex-col sm:flex-row gap-4">
@@ -97,8 +99,8 @@ const LinkCard: React.FC<LinkCardProps> = ({ url, fetchUrls }) => {
           <div className="flex items-center gap-2 bg-secondary p-2 rounded-md">
             <LinkIcon className="h-4 w-4 text-primary flex-shrink-0" />
             <a
-              href={`${BaseUrl}redirect/${url?.custom_url || url.short_url}`}
-              title={`${BaseUrl}redirect/${url?.custom_url || url.short_url}`}
+              href={redirectUrl}
+              title={redirectUrl}
               target="_blank"
               rel="noopener noreferrer"
               className="text-primary hover:underline flex items-center gap-1 truncate"
@@ -130,9 +132,7 @@ const LinkCard: React.FC<LinkCardProps> = ({ url, fetchUrls }) => {
               <Button
                 variant="outline"
                 size="sm"
-                onClick={() =>
-                  copyText(`${BaseUrl}${url?.custom_url || url.short_url}`)
-                }
+                onClick={() => copyText(redirectUrl)}
               >
                 <Copy className="h-4 w-4 mr-2" />
                 {isCopying ? "Copied!" : "Copy"}
