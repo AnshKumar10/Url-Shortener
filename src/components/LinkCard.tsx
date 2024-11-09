@@ -97,8 +97,8 @@ const LinkCard: React.FC<LinkCardProps> = ({ url, fetchUrls }) => {
           <div className="flex items-center gap-2 bg-secondary p-2 rounded-md">
             <LinkIcon className="h-4 w-4 text-primary flex-shrink-0" />
             <a
-              href={`${BaseUrl}${url?.custom_url || url.short_url}`}
-              title={`${BaseUrl}${url?.custom_url || url.short_url}`}
+              href={`${BaseUrl}redirect/${url?.custom_url || url.short_url}`}
+              title={`${BaseUrl}redirect/${url?.custom_url || url.short_url}`}
               target="_blank"
               rel="noopener noreferrer"
               className="text-primary hover:underline flex items-center gap-1 truncate"
