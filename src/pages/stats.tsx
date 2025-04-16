@@ -113,16 +113,16 @@ const LinkPage = () => {
               <div className="flex items-center space-x-2">
                 <a
                   href={`${BaseUrl}redirect/${
-                    url?.custom_url || url.short_url
+                    url?.custom_url || url?.short_url
                   }`}
                   title={`${BaseUrl}redirect/${
-                    url?.custom_url || url.short_url
+                    url?.custom_url || url?.short_url
                   }`}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="text-xl text-blue-500 font-semibold hover:underline"
                 >
-                  {`${BaseUrl}${url?.short_url}`}
+                  {`${BaseUrl}${url?.custom_url || url?.short_url}`}
                 </a>
               </div>
             </div>

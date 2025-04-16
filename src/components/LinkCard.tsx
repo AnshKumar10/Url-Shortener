@@ -62,21 +62,6 @@ const LinkCard: React.FC<LinkCardProps> = ({ url, fetchUrls }) => {
   return (
     <Card className="w-full max-w-2xl bg-card hover:shadow-lg transition-shadow duration-300">
       <CardHeader className="flex flex-col sm:flex-row gap-4">
-        <div className="w-full sm:w-auto flex justify-center">
-          {url?.qr_code ? (
-            <img
-              src={url?.qr_code}
-              className="h-24 w-24 object-cover min-w-max rounded-md ring-2 ring-primary"
-              alt="QR code"
-            />
-          ) : (
-            <img
-              src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRXJA32WU4rBpx7maglqeEtt3ot1tPIRWptxA&s"
-              className="h-24 w-24 object-cover min-w-max rounded-md ring-2 ring-primary"
-              alt="QR code placeholder"
-            />
-          )}
-        </div>
         <div className="flex-1 text-center sm:text-left">
           <CardTitle className="text-xl sm:text-2xl font-bold">
             <Link
