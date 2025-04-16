@@ -120,7 +120,7 @@ const LinkPage = () => {
                   rel="noopener noreferrer"
                   className="text-xl text-blue-500 font-semibold hover:underline"
                 >
-                  {`${BaseUrl}${url?.short_url}`}
+                  {`${BaseUrl}${url?.custom_url || url?.short_url}`}
                 </a>
               </div>
             </div>

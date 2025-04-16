@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { useFormik } from "formik";
-import * as Yup from "yup";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -24,12 +23,6 @@ const Profile = () => {
     initialValues: {
       phone: user.phone || "",
     },
-    validationSchema: Yup.object({
-      phone: Yup.string()
-        .required("Phone number is required")
-        .matches(/^[0-9]+$/, "Must be only digits")
-        .optional(),
-    }),
     onSubmit: async () => {
       setIsLoading(true);
       try {
@@ -122,7 +115,7 @@ const Profile = () => {
                   className="mt-2"
                 >
                   <Pencil className="w-4 h-4 mr-2" />
-                  {isEditing ? "Cancel Editing" : "Edit Profile"}
+                  {isEditing ? "Cancel Editing" : "Edit Profile Pic"}
                 </Button>
               </div>
             </div>
@@ -154,22 +147,6 @@ const Profile = () => {
                     defaultValue={user?.user_metadata?.email}
                   />
                 </div>
-                {/* <div className="space-y-2">
-                  <Label htmlFor="phone" className="text-base">
-                    Phone Number
-                  </Label>
-                  <Input
-                    id="phone"
-                    type="tel"
-                    disabled={!isEditing}
-                    {...formik.getFieldProps("phone")}
-                  />
-                  {formik.touched.phone && formik.errors.phone ? (
-                    <div className="text-red-600 text-sm">
-                      {formik.errors.phone}
-                    </div>
-                  ) : null}
-                </div> */}
               </div>
 
               {isEditing && (
@@ -198,15 +175,14 @@ const Profile = () => {
               </Alert>
             </form>
 
-            {/* Additional Actions */}
-            {/* <div className="flex flex-col space-y-2 mt-6">
+            <div className="flex flex-col space-y-2 mt-6">
               <Button type="button" variant="outline">
                 Forgot Password
               </Button>
               <Button type="button" variant="outline" className="text-red-600">
                 Delete Account
               </Button>
-            </div> */}
+            </div>
           </CardContent>
         </Card>
       </div>
